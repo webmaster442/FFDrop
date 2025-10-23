@@ -1,4 +1,6 @@
-﻿using FFDrop.Model;
+﻿using System.Diagnostics.Tracing;
+
+using FFDrop.Model;
 
 namespace FFDrop.CustomDialogs;
 
@@ -19,6 +21,8 @@ internal static class CustomDialogFactory
         var dialog = new SelectorDialogWindow(dialogdefinition.Values ?? Array.Empty<string>(), dialogdefinition.DefaultValue ?? string.Empty);
         dialog.Title = dialogdefinition.Title;
         dialog.Description = dialogdefinition.Description;
+        dialog.Owner = App.Current.MainWindow;
+        dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
         return dialog;
     }
 

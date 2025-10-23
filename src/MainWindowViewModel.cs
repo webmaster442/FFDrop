@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+
 using FFDrop.CustomDialogs;
 using FFDrop.DomainServices;
 using FFDrop.Model;
 using FFDrop.Presets;
+
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
@@ -45,7 +47,7 @@ internal sealed partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        if (ProgramFinder.TryFindProgramPath("ffmpeg.exe", out var ffmpegPath))
+        if (!ProgramFinder.TryFindProgramPath("ffmpeg.exe", out var ffmpegPath))
         {
             _dialogs.ErrorMessage("FFmpeg executable not found. Please ensure ffmpeg.exe is available in the system PATH.", "FFmpeg not found");
             return;
@@ -63,7 +65,10 @@ internal sealed partial class MainWindowViewModel : ObservableObject
 
         int current = 1;
 
-        (string key, string value)[] additonals = GetCustomSelectorValues().ToArray();
+        if (!TryGetCustomSelectorValues(out var additonals))
+        {
+            return;
+        }
 
         foreach (var file in files)
         {
@@ -110,8 +115,9 @@ internal sealed partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private IEnumerable<(string key, string value)> GetCustomSelectorValues()
+    private bool TryGetCustomSelectorValues(out List<(string key, string value)> output)
     {
+        output = new();
         if (SelectedPreset == null
             || SelectedPreset.AssociatedPreset == null)
         {
@@ -125,10 +131,17 @@ internal sealed partial class MainWindowViewModel : ObservableObject
                 var dialog = CustomDialogFactory.Create(dialogDef);
                 if (dialog.TryGetCommandLineValue(out var commandLine))
                 {
-                    yield return ($"{{{dialogDef.Name}}}", commandLine);
+                    output.Add(($"{{{dialogDef.Name}}}", commandLine));
+                }
+                else
+                {
+                    output.Clear();
+                    return false;
                 }
             }
         }
+
+        return true;
     }
 
     private string CreateCommandLine(string file,

@@ -10,7 +10,7 @@
     Height="450"
     ResizeMode="CanMinimize"
     mc:Ignorable="d">
-    <Grid ShowGridLines="True">
+    <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -29,17 +29,24 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock
-                        Width="150"
-                        Height="30"
-                        Margin="5"
                         VerticalAlignment="Center"
+                        FontSize="18"
                         Text="{Binding}"
                         TextAlignment="Center" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentTextFillColorSecondaryBrush}" />
+                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel />
+                    <UniformGrid
+                        Columns="4"
+                        IsItemsHost="True" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
@@ -57,7 +64,8 @@
             Height="32"
             Margin="10"
             Click="BtnOk_Click"
-            Content="Ok" />
+            Content="Ok"
+            Style="{DynamicResource AccentButtonStyle}" />
         <Button
             x:Name="BtnCancel"
             Grid.Row="2"
