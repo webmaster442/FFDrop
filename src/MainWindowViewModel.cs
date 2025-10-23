@@ -88,7 +88,8 @@ internal sealed partial class MainWindowViewModel : ObservableObject
 
         builder
             .WithMessage("Finished")
-            .WithTerminalProgrssHidden();
+            .WithTerminalProgrssHidden()
+            .WithCurrentFolderOpenedInExplorer();
 
         File.WriteAllText(scriptFile, builder.Build());
 

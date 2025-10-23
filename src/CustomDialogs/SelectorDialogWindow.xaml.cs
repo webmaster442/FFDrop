@@ -12,6 +12,7 @@ namespace FFDrop.CustomDialogs
             InitializeComponent();
             LstOptions.ItemsSource = items;
             LstOptions.SelectedItem = defaultselection;
+            LstOptions.Focus();
         }
 
         public string Description

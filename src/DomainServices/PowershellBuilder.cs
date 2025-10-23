@@ -66,4 +66,10 @@ internal class PowershellBuilder
         _scriptBuilder.AppendLine("Write-Host -NoNewline (\"`e]9;4;0;0`a\")");
         return this;
     }
+
+    public PowershellBuilder WithCurrentFolderOpenedInExplorer()
+    {
+        _scriptBuilder.AppendLine("Invoke-Item -Path .");
+        return this;
+    }
 }
