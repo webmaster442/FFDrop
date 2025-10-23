@@ -1,0 +1,111 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "title": "FFMpegPresets",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "description": "schema pointing to document schema"
+        },
+        "dialogdefinitions": {
+            "type": "array",
+            "description": "An array of dialog definitions",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "dialog definition name",
+                        "pattern": "^[a-z0-9_-:]{3,20}$"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "dialog title",
+                        "minLength": 3,
+                        "maxLength": 100
+
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "dialog description",
+                        "minLength": 3,
+                        "maxLength": 255
+                    },
+                    "dialogtype": {
+                        "type": "string",
+                        "enum": [
+                            "selector",
+                            "time"
+                        ]
+                    },
+                    "values": {
+                        "type": "array",
+                        "description": "An array of possible values for selector dialog type",
+                        "items": {
+                            "type": "string",
+                            "minLength": 3
+                        }
+                    },
+                    "defaultValue": {
+                        "type": "string",
+                        "description": "default value for the dialog"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "required": [
+                "name",
+                "description",
+                "dialogtype"
+            ]
+        },
+        "presets": {
+            "type": "array",
+            "description": "An array of preset items",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "preset name",
+                        "pattern": "^[a-z0-9_-:]{3,20}$"
+                    },
+                    "extension": {
+                        "type": "string",
+                        "description": "target file extension",
+                        "pattern": "^\\.[a-z0-9]{1,10}$"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "organizing path",
+                        "minLength": 3
+                    },
+                    "commandLine": {
+                        "type": "string",
+                        "description": "ffmpeg arguments to execute. Must contain {input} and {output} tags",
+                        "pattern": "^(?=.*\\{input\\})(?=.*\\{output\\}).*$"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Preset description",
+                        "minLength": 3,
+                        "maxLength": 255
+                    }
+                },
+                "required": [
+                    "name",
+                    "extension",
+                    "path",
+                    "commandLine",
+                    "description"
+                ]
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "presets",
+        "dialogdefinitions"
+    ],
+    "additionalProperties": false
+}
