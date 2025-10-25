@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:FFDrop"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:FFDrop.Model"
-    x:Name="Main"
     Title="FFDrop"
     Width="832"
     Height="468"
@@ -15,7 +14,7 @@
     DragOver="Window_DragOver"
     Drop="Window_Drop"
     ResizeMode="CanMinimize"
-    Topmost="True"
+    Topmost="{Binding Settings.AllwaysOnTop}"
     WindowStyle="SingleBorderWindow"
     mc:Ignorable="d">
     <Grid ShowGridLines="False">
@@ -27,16 +26,17 @@
         <Menu Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem
-                    Header="Allways on top"
-                    IsCheckable="True"
-                    IsChecked="{Binding ElementName=Main, Path=Topmost}" />
-                <Separator />
-                <MenuItem
                     x:Name="MenuExit"
                     Click="MenuExit_Click"
-                    Header="Exit" />
+                    Header="Exit"
+                    InputGestureText="ALT+F4" />
             </MenuItem>
             <MenuItem Header="Settings">
+                <MenuItem
+                    Header="Allways on top"
+                    IsCheckable="True"
+                    IsChecked="{Binding Settings.AllwaysOnTop}" />
+                <Separator />
                 <MenuItem Header="Behaviour">
                     <MenuItem
                         Header="Create shell script &amp; ask to run it"

@@ -47,6 +47,14 @@ internal partial class SettingsViewModel : ObservableObject
         Settings.Default.Save();
     }
 
+    [ObservableProperty]
+    public partial bool AllwaysOnTop { get; set; }
+
+    partial void OnAllwaysOnTopChanged(bool value)
+    {
+        Settings.Default.AllwaysOnTop = value;
+        Settings.Default.Save();
+    }
 
     public SettingsViewModel(IDialogs dialogs)
     {
@@ -59,6 +67,7 @@ internal partial class SettingsViewModel : ObservableObject
         CreateShellConfirmRun = Settings.Default.CreateShellConfirmRun;
         CreateShellRun = Settings.Default.CreateShellRun;
         CreateShell = Settings.Default.CreateShell;
+        AllwaysOnTop = Settings.Default.AllwaysOnTop;
     }
 
     [RelayCommand]

@@ -82,5 +82,17 @@ namespace FFDrop.Properties {
                 this["CreateShell"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AllwaysOnTop {
+            get {
+                return ((bool)(this["AllwaysOnTop"]));
+            }
+            set {
+                this["AllwaysOnTop"] = value;
+            }
+        }
     }
 }

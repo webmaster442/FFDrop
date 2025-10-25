@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>../branding/icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
