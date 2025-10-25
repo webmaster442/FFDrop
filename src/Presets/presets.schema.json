@@ -43,7 +43,7 @@
                         "description": "An array of possible values for selector dialog type",
                         "items": {
                             "type": "string",
-                            "minLength": 3
+                            "minLength": 1
                         }
                     },
                     "defaultValue": {

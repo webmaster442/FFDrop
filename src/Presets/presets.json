@@ -51,6 +51,25 @@
         "320k"
       ],
       "defaultValue": "320k"
+    },
+    {
+      "name": "audiostreamselect",
+      "title": "Audio Stream Selection",
+      "description": "Please select which audio stream to use for encoding",
+      "dialogtype": "selector",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "defaultValue": "0"
     }
   ],
   "presets": [
@@ -72,56 +91,56 @@
       "name": "wavpack",
       "path": "Audio/Losless",
       "extension": ".wv",
-      "description": "Encodes an input file to lossless WAVPACK format. If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to lossless WAVPACK format. If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a wavpack {output}"
     },
     {
       "name": "cd-wav",
       "path": "Audio/Losless",
       "extension": ".wav",
-      "description": "Encodes an input file to uncompressed PCM WAV format (CD quality). If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to uncompressed PCM WAV format (CD quality). If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a pcm_s16le -ar 44100 -ac 2 {output}"
     },
     {
       "name": "dvd-wav",
       "path": "Audio/Losless",
       "extension": ".wav",
-      "description": "Encodes an input file to uncompressed PCM WAV format (DVD quality). If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to uncompressed PCM WAV format (DVD quality). If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a pcm_s16le -ar 48000 {output}"
     },
     {
       "name": "mp3",
       "path": "Audio/Lossy",
       "extension": ".mp3",
-      "description": "Encodes an input file to lossy MP3 format at 320kbps. If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to lossy MP3 format at 320kbps. If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -b:a -b:a {audiobitrate} {output}"
     },
     {
       "name": "m4a",
       "path": "Audio/Lossy",
       "extension": ".m4a",
-      "description": "Encodes an input file to lossy AAC format at 192kbps. If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to lossy AAC format at 192kbps. If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a aac -b:a {audiobitrate} {output}"
     },
     {
       "name": "ac3",
       "path": "Audio/Lossy",
       "extension": ".ac3",
-      "description": "Encodes an input file to lossy AC3 format at 448kbps. If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to lossy AC3 format at 448kbps. If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a ac3 -b:a {ac3select} {output}"
     },
     {
       "name": "weba-opus-128k",
       "path": "Audio/Web",
       "extension": ".weba",
-      "description": "Encodes an input file to lossy Opus format at 128kbps. If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to lossy Opus format at 128kbps. If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a libopus -b:a 128k {output}"
     },
     {
       "name": "weba-opus-192k",
       "path": "Audio/Web",
       "extension": ".weba",
-      "description": "Encodes an input file to lossy Opus format at 192kbps. If the input file is a video, the audio stream is extracted only.",
+      "description": "Encodes an input file to lossy Opus format at 192kbps. If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a libopus -b:a 192k {output}"
     },
     {
@@ -130,6 +149,13 @@
       "extension": ".weba",
       "description": "Encodes an input file to lossy Vorbits format with variable bitrate quality 6. If the input file is a video, the audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a libvorbis -q:a 6 {output}"
+    },
+    {
+      "name": "remux-mkv",
+      "path": "Others",
+      "extension": ".mkv",
+      "description": "Remuxes an input video file to MKV container without re-encoding.",
+      "commandLine": "-i {input} -c:a copy -c:v copy {output}"
     },
     {
       "name": "h264-mp4",

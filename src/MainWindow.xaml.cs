@@ -8,10 +8,13 @@ namespace FFDrop;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private readonly Dialogs _dialogs;
+
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel(new Dialogs());
+        _dialogs = new();
+        DataContext = new MainWindowViewModel(_dialogs);
     }
 
     private void OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -49,6 +52,26 @@ public partial class MainWindow : Window
             && e.Data.GetData(DataFormats.FileDrop) is string[] files)
         {
             vm.HandleDrop(files);
+        }
+    }
+
+    private void MenuExit_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
+    private void MenuFFmpeg_Click(object sender, RoutedEventArgs e)
+    {
+        using var ffmpegWindow = new GithubDownloadWindow(_dialogs);
+        ffmpegWindow.Owner = this;
+        bool? result = ffmpegWindow.ShowDialog();
+        if (result == true)
+        {
+            _dialogs.InfoMessage("FFMpeg successuflly downloaded", "Download complete");
+        }
+        else
+        {
+            _dialogs.WarningMessage("FFMpeg download cancelled or failed", "Download incomplete");
         }
     }
 }

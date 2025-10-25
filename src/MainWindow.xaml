@@ -6,10 +6,10 @@
     xmlns:local="clr-namespace:FFDrop"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:FFDrop.Model"
-    x:Name="MainWindow"
+    x:Name="Main"
     Title="FFDrop"
-    Width="800"
-    Height="450"
+    Width="832"
+    Height="468"
     AllowDrop="True"
     DragEnter="Window_DragEnter"
     DragOver="Window_DragOver"
@@ -18,140 +18,134 @@
     Topmost="True"
     WindowStyle="SingleBorderWindow"
     mc:Ignorable="d">
-    <Grid>
-        <CheckBox
-            Margin="5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Content="Allways on top"
-            IsChecked="{Binding ElementName=MainWindow, Path=Topmost}" />
-        <TabControl TabStripPlacement="Bottom">
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            Margin="5"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Text="&#xE8AB;" />
-                        <TextBlock Text="Convert" />
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid ShowGridLines="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="240" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="80" />
-                    </Grid.RowDefinitions>
-                    <GroupBox
-                        Grid.RowSpan="2"
-                        Grid.Column="0">
-                        <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="5"
-                                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                    Text="&#xE8F1;" />
-                                <TextBlock Text="Presets" />
-                            </StackPanel>
-                        </GroupBox.Header>
-                        <TreeView
-                            ItemsSource="{Binding Presets}"
-                            SelectedItemChanged="OnSelectedItemChanged">
-                            <TreeView.ItemContainerStyle>
-                                <Style TargetType="TreeViewItem">
-                                    <Setter Property="IsExpanded" Value="True" />
-                                </Style>
-                            </TreeView.ItemContainerStyle>
-                            <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate
-                                    DataType="{x:Type model:PresetViewModel}"
-                                    ItemsSource="{Binding Children}">
-                                    <TextBlock Text="{Binding Name}" />
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
-                    </GroupBox>
-                    <Viewbox
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="0,0,0,40">
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Foreground="{StaticResource AccentTextFillColorPrimaryBrush}"
-                            Text="&#xEC57;" />
-                    </Viewbox>
-                    <TextBlock
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="0,0,0,10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
-                        FontSize="16"
-                        Text="Drag &amp; Drop files here" />
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="4"
-                        Foreground="{StaticResource TextFillColorSecondaryBrush}"
-                        Text="{Binding SelectedPreset.AssociatedPreset.Description}"
-                        TextWrapping="Wrap" />
-                </Grid>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            Margin="5"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Text="&#xE713;" />
-                        <TextBlock Text="Settings" />
-                    </StackPanel>
-                </TabItem.Header>
-                <StackPanel Margin="5">
-                    <TextBlock
-                        Margin="0,10"
-                        Style="{StaticResource TitleTextBlockStyle}"
-                        Text="Behaviour" />
-                    <RadioButton
-                        Margin="10,0"
-                        Content="Create shell script &amp; ask to run it"
-                        GroupName="Behaviour"
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem
+                    Header="Allways on top"
+                    IsCheckable="True"
+                    IsChecked="{Binding ElementName=Main, Path=Topmost}" />
+                <Separator />
+                <MenuItem
+                    x:Name="MenuExit"
+                    Click="MenuExit_Click"
+                    Header="Exit" />
+            </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem Header="Behaviour">
+                    <MenuItem
+                        Header="Create shell script &amp; ask to run it"
+                        IsCheckable="True"
                         IsChecked="{Binding Settings.CreateShellConfirmRun}" />
-                    <RadioButton
-                        Margin="10,0"
-                        Content="Create shell script &amp; start on drop"
-                        GroupName="Behaviour"
+                    <MenuItem
+                        Header="Create shell script &amp; start on drop"
+                        IsCheckable="True"
                         IsChecked="{Binding Settings.CreateShellRun}" />
-                    <RadioButton
-                        Margin="10,0"
-                        Content="Crearte only shell script"
-                        GroupName="Behaviour"
+                    <MenuItem
+                        Header="Crearte only shell script"
+                        IsCheckable="True"
                         IsChecked="{Binding Settings.CreateShell}" />
-                    <Separator Margin="0,10" />
-                    <TextBlock
-                        Margin="0,10"
-                        Style="{StaticResource TitleTextBlockStyle}"
-                        Text="Output folder" />
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBox
-                            Grid.Column="0"
-                            Margin="10,0"
-                            Text="{Binding Settings.OutputDirectory}" />
-                        <Button
-                            Grid.Column="1"
-                            Command="{Binding Settings.BrowseCommand}"
-                            Content="Browse..."
-                            Style="{DynamicResource AccentButtonStyle}" />
-                    </Grid>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="FFMpeg">
+                <MenuItem
+                    x:Name="MenuFFmpeg"
+                    Click="MenuFFmpeg_Click"
+                    Header="Download from github..." />
+            </MenuItem>
+        </Menu>
+        <Grid
+            Grid.Row="1"
+            ShowGridLines="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition
+                    Height="Auto"
+                    MinHeight="50" />
+            </Grid.RowDefinitions>
+            <GroupBox
+                Grid.RowSpan="2"
+                Grid.Column="0">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            Margin="5"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            Text="&#xE8F1;" />
+                        <TextBlock Text="Presets" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <TreeView
+                    ItemsSource="{Binding Presets}"
+                    SelectedItemChanged="OnSelectedItemChanged">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="IsExpanded" Value="True" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type model:PresetViewModel}"
+                            ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}" />
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </GroupBox>
+            <Viewbox
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,40">
+                <TextBlock
+                    FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    Foreground="{StaticResource AccentTextFillColorPrimaryBrush}"
+                    Text="&#xEC57;" />
+            </Viewbox>
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                FontSize="16"
+                Text="Drag &amp; Drop files here" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="4"
+                Foreground="{StaticResource TextFillColorSecondaryBrush}"
+                Text="{Binding SelectedPreset.AssociatedPreset.Description}"
+                TextAlignment="Justify"
+                TextWrapping="Wrap" />
+        </Grid>
+
+        <GroupBox
+            Grid.Row="2"
+            Header="Output folder">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    Margin="10,0"
+                    Text="{Binding Settings.OutputDirectory}" />
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding Settings.BrowseCommand}"
+                    Content="Browse..."
+                    Style="{DynamicResource AccentButtonStyle}" />
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>
