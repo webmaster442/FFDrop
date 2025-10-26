@@ -17,6 +17,8 @@ internal sealed partial class GithubDownloadWindow : Window, IDisposable
 {
     private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly IDialogs _dialogs;
+    private DateTime _lastupdate;
+    private readonly TimeSpan _updateInterval = TimeSpan.FromMilliseconds(800);
 
     public GithubDownloadWindow(IDialogs dialogs)
     {
@@ -42,6 +44,11 @@ internal sealed partial class GithubDownloadWindow : Window, IDisposable
 
     private void UpdateStatus(double value, string message)
     {
+        if (DateTime.UtcNow - _lastupdate > _updateInterval)
+            _lastupdate = DateTime.UtcNow;
+        else
+            return;
+
         Dispatcher.Invoke(() =>
         {
             if (value < 0)
@@ -83,7 +90,7 @@ internal sealed partial class GithubDownloadWindow : Window, IDisposable
 
             using var zipStream = await zipStatus.Content.ReadAsStreamAsync(cancellationToken);
             using var memoryStream = new MemoryStream(asset.Size);
-            byte[] copyBuffer = ArrayPool<byte>.Shared.Rent(4096);
+            byte[] copyBuffer = ArrayPool<byte>.Shared.Rent(16 * 1024);
             int totalRead = 0;
             int bytesRead;
 
@@ -100,7 +107,7 @@ internal sealed partial class GithubDownloadWindow : Window, IDisposable
             ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Read);
 
             var files = archive.Entries.Where(e => e.Name.EndsWith(".exe") || e.Name.EndsWith(".dll")).ToList();
-            
+
             UpdateStatus(0, "Extracting files");
             SetMax(files.Count);
 

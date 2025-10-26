@@ -1,13 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Text;
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 using FFDrop.CustomDialogs;
 using FFDrop.DomainServices;
 using FFDrop.Model;
 using FFDrop.Presets;
-
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
 
 namespace FFDrop;
 
@@ -56,10 +56,13 @@ internal sealed partial class MainWindowViewModel : ObservableObject
         var scriptFile = Path.Combine(Settings.OutputDirectory,
                                       Path.ChangeExtension(Path.GetFileName(Settings.OutputDirectory), ".ps1"));
 
+        var title = Path.GetFileName(scriptFile);
+
         List<string> skipped = new();
 
         var builder = new PowershellBuilder()
             .WithUtf8Enabled()
+            .WithWindowTitle(title)
             .WithWindowTitle(Path.GetFileNameWithoutExtension(""))
             .WithClear();
 
@@ -87,7 +90,7 @@ internal sealed partial class MainWindowViewModel : ObservableObject
         }
 
         builder
-            .WithMessage("Finished")
+            .WithInfoMessageBox("Conversion finished", title)
             .WithTerminalProgrssHidden()
             .WithCurrentFolderOpenedInExplorer();
 

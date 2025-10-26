@@ -52,11 +52,11 @@
                         IsChecked="{Binding Settings.CreateShell}" />
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="FFMpeg">
+            <MenuItem Header="Tools">
                 <MenuItem
                     x:Name="MenuFFmpeg"
                     Click="MenuFFmpeg_Click"
-                    Header="Download from github..." />
+                    Header="Download FFmpeg binary from github..." />
             </MenuItem>
         </Menu>
         <Grid
@@ -96,7 +96,9 @@
                         <HierarchicalDataTemplate
                             DataType="{x:Type model:PresetViewModel}"
                             ItemsSource="{Binding Children}">
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock
+                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                                Text="{Binding Name}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
@@ -107,7 +109,7 @@
                 Margin="0,0,0,40">
                 <TextBlock
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    Foreground="{StaticResource AccentTextFillColorPrimaryBrush}"
+                    Foreground="{StaticResource AccentFillColorTertiaryBrush}"
                     Text="&#xEC57;" />
             </Viewbox>
             <TextBlock

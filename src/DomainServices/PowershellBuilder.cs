@@ -9,6 +9,20 @@ internal class PowershellBuilder
     public PowershellBuilder()
     {
         _scriptBuilder = new StringBuilder(4096);
+        _scriptBuilder.Append("""
+            function Show-InfoMessageBox {
+                param (
+                    [Parameter(Mandatory=$true)]
+                    [string]$Text,
+
+                    [Parameter(Mandatory=$true)]
+                    [string]$Title
+                )
+
+                Add-Type -AssemblyName System.Windows.Forms
+                [System.Windows.Forms.MessageBox]::Show($Text, $Title, 'OK', 'Information')
+            }
+            """);
     }
 
     public string Build()
@@ -48,9 +62,10 @@ internal class PowershellBuilder
         return this;
     }
 
-    public PowershellBuilder WithMessage(string msg)
+    public PowershellBuilder WithInfoMessageBox(string message, string title)
     {
-        _scriptBuilder.AppendLine($"Write-Host \"{msg}\"");
+        _scriptBuilder.AppendLine($"Show-InfoMessageBox -Text \"{message}\" -Title \"{title}\"");
+        _scriptBuilder.AppendLine($"Write-Host \"{title}: {message}\"");
         return this;
     }
 
