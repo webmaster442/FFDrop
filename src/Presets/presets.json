@@ -70,6 +70,26 @@
         "9"
       ],
       "defaultValue": "0"
+    },
+    {
+      "name": "quality",
+      "title": "Audio Quality Selection",
+      "description": "Please select audio quality for variable bitrate encoding (lower is better quality)",
+      "dialogtype": "selector",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "defaultValue": "4"
     }
   ],
   "presets": [
@@ -96,38 +116,87 @@
     },
     {
       "name": "cd-wav",
-      "path": "Audio/Losless",
+      "path": "Audio/Losless/Wav",
       "extension": ".wav",
       "description": "Encodes an input file to uncompressed PCM WAV format (CD quality). If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a pcm_s16le -ar 44100 -ac 2 {output}"
     },
     {
       "name": "dvd-wav",
-      "path": "Audio/Losless",
+      "path": "Audio/Losless/Wav",
       "extension": ".wav",
       "description": "Encodes an input file to uncompressed PCM WAV format (DVD quality). If the input file is a video, the 1st audio stream is extracted only.",
       "commandLine": "-i {input} -vn -c:a pcm_s16le -ar 48000 {output}"
     },
     {
-      "name": "mp3",
+      "name": "wav-16bit",
+      "path": "Audio/Losless/Wav",
+      "extension": ".wav",
+      "description": "Encodes an input file to uncompressed PCM WAV format with 16-bit samples. If the input file is a video, the 1st audio stream is extracted only.",
+      "commandLine": "-i {input} -vn -c:a pcm_s16le {output}"
+    },
+    {
+      "name": "wav-24bit",
+      "path": "Audio/Losless/Wav",
+      "extension": ".wav",
+      "description": "Encodes an input file to uncompressed PCM WAV format with 24-bit samples. If the input file is a video, the 1st audio stream is extracted only.",
+      "commandLine": "-i {input} -vn -c:a pcm_s24le {output}"
+    },
+    {
+      "name": "wav-float",
+      "path": "Audio/Losless/Wav",
+      "extension": ".wav",
+      "description": "Encodes an input file to uncompressed PCM WAV format with 32-bit float samples. If the input file is a video, the 1st audio stream is extracted only.",
+      "commandLine": "-i {input} -vn -c:a pcm_f32le {output}"
+    },
+    {
+      "name": "mp3-bitrate",
       "path": "Audio/Lossy",
       "extension": ".mp3",
       "description": "Encodes an input file to lossy MP3 format at 320kbps. If the input file is a video, the 1st audio stream is extracted only.",
-      "commandLine": "-i {input} -vn -b:a -b:a {audiobitrate} {output}"
+      "commandLine": "-i {input} -vn -c:a libmp3lame -b:a -b:a {audiobitrate} {output}"
     },
     {
-      "name": "m4a",
+      "name": "mp3-vbr",
+      "path": "Audio/Lossy",
+      "extension": ".mp3",
+      "description": "Encodes an input file to lossy MP3 format with variable bitrate quality. If the input file is a video, the 1st audio stream is extracted only. quality is selectable before encoding.",
+      "commandLine": "-i {input} -vn -c:a libmp3lame -q:a {quality} {output}"
+    },
+    {
+      "name": "m4a-bitrate",
       "path": "Audio/Lossy",
       "extension": ".m4a",
-      "description": "Encodes an input file to lossy AAC format at 192kbps. If the input file is a video, the 1st audio stream is extracted only.",
+      "description": "Encodes an input file to lossy AAC format based on bitrate. If the input file is a video, the 1st audio stream is extracted only. Bitrate is selectable before encoding.",
       "commandLine": "-i {input} -vn -c:a aac -b:a {audiobitrate} {output}"
+    },
+    {
+      "name": "m4a-vbr",
+      "path": "Audio/Lossy",
+      "extension": ".m4a",
+      "description": "Encodes an input file to lossy AAC format based on variable bitrate quality. If the input file is a video, the 1st audio stream is extracted only. Quality is selectable before encoding.",
+      "commandLine": "-i {input} -vn -c:a aac -q:a {quality} {output}"
     },
     {
       "name": "ac3",
       "path": "Audio/Lossy",
       "extension": ".ac3",
-      "description": "Encodes an input file to lossy AC3 format at 448kbps. If the input file is a video, the 1st audio stream is extracted only.",
+      "description": "Encodes an input file to lossy AC3 format. If the input file is a video, the 1st audio stream is extracted only. Bitrate is selectable before encoding.",
       "commandLine": "-i {input} -vn -c:a ac3 -b:a {ac3select} {output}"
+    },
+    {
+      "name": "wma",
+      "path": "Audio/Lossy",
+      "extension": ".wma",
+      "description": "Encodes an input file to lossy WMA 1.0 format. If the input file is a video, the 1st audio stream is extracted only. Bitrate is selectable before encoding.",
+      "commandLine": "-i {input} -vn -c:a wmav1 -b:a {audiobitrate} {output}"
+    },
+    {
+      "name": "wma2",
+      "path": "Audio/Lossy",
+      "extension": ".wma",
+      "description": "Encodes an input file to lossy WMA 2.0 format. If the input file is a video, the 1st audio stream is extracted only. Bitrate is selectable before encoding.",
+      "commandLine": "-i {input} -vn -c:a wmav2 -b:a {audiobitrate} {output}"
     },
     {
       "name": "weba-opus-128k",
@@ -175,29 +244,57 @@
       "name": "ntsc-4:3-ac3",
       "path": "Video/DVD/NTSC",
       "extension": ".mpg",
-      "description": "Encodes an input video file to DVD compliant MPEG-2 format for NTSC 4:3 DVDs. Audio is encoded to AC3 format. Audo bitrate is selectable before encoding.",
-      "commandLine": "-i {input} -c:a ac3 {ac3select} -aspect 4:3 -target ntsc-dvd -o {output}"
+      "description": "Encodes an input video file to DVD compliant MPEG-2 format for NTSC 4:3 DVDs. Audio is encoded to AC3 format at 448kbps. Vido bitrate varies between 6000-9000kbps.",
+      "commandLine": "-i {input} -aspect 4:3 -target ntsc-dvd -o {output}"
     },
     {
       "name": "ntsc-16:9-ac3",
       "path": "Video/DVD/NTSC",
       "extension": ".mpg",
-      "description": "Encodes an input video file to DVD compliant MPEG-2 format for NTSC 4:3 DVDs. Audio is encoded to AC3 format. Audo bitrate is selectable before encoding.",
-      "commandLine": "-i {input} -c:a ac3 -b:a {ac3select} -aspect 16:9 -target ntsc-dvd -o {output}"
+      "description": "Encodes an input video file to DVD compliant MPEG-2 format for NTSC 4:3 DVDs. Audio is encoded to AC3 format at 448kbps. Vido bitrate varies between 6000-9000kbps.",
+      "commandLine": "-i {input} -aspect 16:9 -target ntsc-dvd -o {output}"
     },
     {
       "name": "pal-4:3-ac3",
       "path": "Video/DVD/PAL",
       "extension": ".mpg",
-      "description": "Encodes an input video file to DVD compliant MPEG-2 format for PAL 4:3 DVDs. Audio is encoded to AC3 format. Audo bitrate is selectable before encoding.",
-      "commandLine": "-i {input} -c:a ac3 {ac3select} -aspect 4:3 -target pal-dvd -o {output}"
+      "description": "Encodes an input video file to DVD compliant MPEG-2 format for PAL 4:3 DVDs.  Audio is encoded to AC3 format at 448kbps. Vido bitrate varies between 6000-9000kbps.",
+      "commandLine": "-i {input} -aspect 4:3 -target pal-dvd -o {output}"
     },
     {
       "name": "pal-16:9-ac3",
       "path": "Video/DVD/PAL",
       "extension": ".mpg",
-      "description": "Encodes an input video file to DVD compliant MPEG-2 format for PAL 4:3 DVDs. Audio is encoded to AC3 format. Audo bitrate is selectable before encoding.",
-      "commandLine": "-i {input} -c:a ac3 -b:a {ac3select} -aspect 16:9 -target pal-dvd -o {output}"
+      "description": "Encodes an input video file to DVD compliant MPEG-2 format for PAL 4:3 DVDs.  Audio is encoded to AC3 format at 448kbps. Vido bitrate varies between 6000-9000kbps.",
+      "commandLine": "-i {input} -aspect 16:9 -target pal-dvd -o {output}"
+    },
+    {
+      "name": "pal",
+      "path": "Video/SVCD",
+      "extension": ".mpg",
+      "description": "Encodes an input video file to SVCD compliant MPEG-2 format for PAL SVCDs. Audio is encoded to MP2 format at 224kbps. Vido bitrate varies between 2440-2516kbps.",
+      "commandLine": "-i {input} -target pal-svcd -o {output}"
+    },
+    {
+      "name": "ntsc",
+      "path": "Video/SVCD",
+      "extension": ".mpg",
+      "description": "Encodes an input video file to SVCD compliant MPEG-2 format for NTSC SVCDs. Audio is encoded to MP2 format at 224kbps. Vido bitrate varies between 2440-2516kbps.",
+      "commandLine": "-i {input} -target ntsc-svcd -o {output}"
+    },
+    {
+      "name": "pal-letterbox",
+      "path": "Video/SVCD",
+      "extension": ".mpg",
+      "description": "Encodes an input video file to SVCD compliant MPEG-2 format for PAL SVCDs with letterboxing for 16:9 aspect ratio. Audio is encoded to MP2 format at 224kbps. Vido bitrate varies between 2440-2516kbps.",
+      "commandLine": "-i {input} -target pal-svcd -vf \"scale=352:576,setsar=1,pad=480:576:(480-352)/2:(576-576)/2:black\" -o {output}"
+    },
+    {
+      "name": "ntsc-letterbox",
+      "path": "Video/SVCD",
+      "extension": ".mpg",
+      "description": "Encodes an input video file to SVCD compliant MPEG-2 format for NTSC SVCDs with letterboxing for 16:9 aspect ratio. Audio is encoded to MP2 format at 224kbps. Vido bitrate varies between 2440-2516kbps.",
+      "commandLine": "-i {input} -target ntsc-svcd -vf \"scale=352:480,setsar=1,pad=480:480:(480-352)/2:(480-480)/2:black\" -o {output}"
     }
   ]
 }
