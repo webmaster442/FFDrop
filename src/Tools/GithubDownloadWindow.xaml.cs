@@ -8,7 +8,7 @@ using FFDrop.DomainServices;
 using FFDrop.Model.Github;
 using FFDrop.Properties;
 
-namespace FFDrop;
+namespace FFDrop.Tools;
 
 /// <summary>
 /// Interaction logic for GithubDownloadWindow.xaml
