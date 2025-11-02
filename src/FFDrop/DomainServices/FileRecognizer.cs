@@ -4,7 +4,7 @@ namespace FFDrop.DomainServices;
 
 internal static class FileRecognizer
 {
-    private readonly static HashSet<string> AudioFiles = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly HashSet<string> AudioFiles = new(StringComparer.OrdinalIgnoreCase)
     {
         ".aac", ".ac3", ".aiff", ".alac",
         ".amr", ".ape", ".atrac", ".au",
@@ -16,7 +16,7 @@ internal static class FileRecognizer
         ".wv"
     };
 
-    private readonly static HashSet<string> VideoFiles = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly HashSet<string> VideoFiles = new(StringComparer.OrdinalIgnoreCase)
     {
         ".3gp", ".asf", ".avi", ".bfi",
         ".f4v", ".flv", ".gxf", ".m4v",
@@ -27,10 +27,22 @@ internal static class FileRecognizer
         ".wmv", ".yuv"
     };
 
+    private static readonly HashSet<string> PlaylistFiles = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".m3u", ".m3u8", ".pls"
+    };
+
     public static bool IsDropConvertSupported(string file)
     {
         var extension = Path.GetExtension(file);
         return AudioFiles.Contains(extension)
             || VideoFiles.Contains(extension);
     }
+
+    public static bool IsPlaylistFile(string file)
+    {
+        var extension = Path.GetExtension(file);
+        return PlaylistFiles.Contains(extension);
+    }
+
 }

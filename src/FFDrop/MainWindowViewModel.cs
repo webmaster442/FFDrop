@@ -8,6 +8,7 @@ using FFDrop.CustomDialogs;
 using FFDrop.DomainServices;
 using FFDrop.Model;
 using FFDrop.Presets;
+using FFDrop.Utils;
 
 namespace FFDrop;
 
@@ -75,13 +76,38 @@ internal sealed partial class MainWindowViewModel : ObservableObject
 
         foreach (var file in files)
         {
-            if (File.Exists(file)
-                && FileRecognizer.IsDropConvertSupported(file))
+            if (File.Exists(file))
             {
-                builder
-                    .WithCommand(CreateCommandLine(file, ffmpegPath, additonals))
-                    .WithTerminalProgress(current, files.Length);
-                ++current;
+                if (FileRecognizer.IsDropConvertSupported(file))
+                {
+                    builder
+                        .WithCommand(CreateCommandLine(file, ffmpegPath, additonals))
+                        .WithTerminalProgress(current, files.Length);
+                    ++current;
+                }
+                else if (FileRecognizer.IsPlaylistFile(file)
+                    && PlaylistUtils.TryLoadPlaylistItems(file, out var playlistitems))
+                {
+                    foreach (var item in playlistitems)
+                    {
+                        if (File.Exists(item)
+                            && FileRecognizer.IsDropConvertSupported(item))
+                        {
+                            builder
+                                .WithCommand(CreateCommandLine(item, ffmpegPath, additonals))
+                                .WithTerminalProgress(current, files.Length);
+                            ++current;
+                        }
+                        else
+                        {
+                            skipped.Add(Path.GetFileName(item));
+                        }
+                    }
+                }
+                else
+                {
+                    skipped.Add(Path.GetFileName(file));
+                }
             }
             else
             {
