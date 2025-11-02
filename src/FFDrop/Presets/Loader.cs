@@ -21,12 +21,14 @@ internal class Loader
 
     private PresetsRoot? _presetsRoot;
 
-    public void LoadPresets(string presetsFile)
+    public bool LoadPresets(string presetsFile)
     {
         if (File.Exists(presetsFile))
         {
             _presetsRoot = JsonSerializer.Deserialize<PresetsRoot>(File.ReadAllText(presetsFile), _options);
+            return _presetsRoot != null;
         }
+        return false;
     }
 
     public Dialogdefinition[] GetDialogDefinitions()
