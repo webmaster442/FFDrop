@@ -6,9 +6,8 @@
     xmlns:local="clr-namespace:FFDrop.CustomDialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="DialogTitle"
-    Width="800"
     Height="450"
-    ResizeMode="CanMinimize"
+    Style="{StaticResource Subdialog}"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
     <Grid ShowGridLines="False">

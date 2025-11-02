@@ -28,6 +28,12 @@ internal static class CustomDialogFactory
 
     private static ICustomDialog CreateTimeDialog(Dialogdefinition dialogdefinition)
     {
-        throw new NotImplementedException();
+        var dialog = new TimeSelectorDoalogWindow()
+        {
+            Title = dialogdefinition.Title,
+            Owner = App.Current.MainWindow,
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
+        };
+        return dialog;
     }
 }

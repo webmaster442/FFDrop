@@ -6,10 +6,9 @@
     xmlns:local="clr-namespace:FFDrop"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="FFMpeg Download"
-    Width="800"
     Height="180"
     x:ClassModifier="internal"
-    ResizeMode="CanMinimize"
+    Style="{StaticResource Subdialog}"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
     <Grid>
