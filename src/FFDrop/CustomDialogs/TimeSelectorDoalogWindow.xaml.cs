@@ -17,11 +17,8 @@ public partial class TimeSelectorDoalogWindow : Window, ICustomDialog
         get
         {
             Dictionary<string, string> props = new();
-            props["from"] = TbCutFrom.Text;
-            if (CbCutTo.IsChecked == true)
-            {
-                props["to"] = TbCutTo.Text;
-            }
+            props["start"] = TbCutFrom.Text;
+            props["end"] = string.IsNullOrWhiteSpace(TbCutTo.Text) ? string.Empty : $"-to {TbCutTo.Text}";
             return System.Text.Json.JsonSerializer.Serialize(props);
         }
     }
@@ -29,6 +26,7 @@ public partial class TimeSelectorDoalogWindow : Window, ICustomDialog
     public TimeSelectorDoalogWindow()
     {
         InitializeComponent();
+        DataContext = new TimeSelectorViewModel();
     }
 
     private void BtnOk_Click(object sender, RoutedEventArgs e)

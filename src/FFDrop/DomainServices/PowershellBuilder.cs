@@ -22,12 +22,19 @@ internal class PowershellBuilder
                 Add-Type -AssemblyName System.Windows.Forms
                 [System.Windows.Forms.MessageBox]::Show($Text, $Title, 'OK', 'Information')
             }
+
             """);
     }
 
     public string Build()
     {
         return _scriptBuilder.ToString();
+    }
+
+    public PowershellBuilder WithVariable(string name, string value)
+    {
+        _scriptBuilder.AppendLine($"${name} = \"{value}\"");
+        return this;
     }
 
     public PowershellBuilder WithClear()

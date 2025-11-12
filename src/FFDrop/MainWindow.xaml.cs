@@ -1,8 +1,7 @@
-﻿using FFDrop.CustomDialogs;
+﻿using System.Windows;
+
 using FFDrop.Model;
 using FFDrop.Tools;
-
-using System.Windows;
 
 namespace FFDrop;
 

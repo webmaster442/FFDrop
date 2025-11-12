@@ -48,20 +48,21 @@
                 Grid.Column="1"
                 Margin="0,10"
                 VerticalAlignment="Center"
-                Text="0" />
+                Text="{Binding FromTime}" />
             <CheckBox
-                x:Name="CbCutTo"
                 Grid.Row="2"
                 Grid.Column="0"
                 Margin="5"
-                Content="Cut to:" />
+                Content="Cut to:"
+                IsChecked="{Binding IsToEnabled}" />
             <TextBox
                 x:Name="TbCutTo"
                 Grid.Row="2"
                 Grid.Column="1"
                 Margin="0,10"
                 VerticalAlignment="Center"
-                IsEnabled="{Binding ElementName=CbCutTo, Path=IsChecked}" />
+                IsEnabled="{Binding IsToEnabled}"
+                Text="{Binding ToTime}" />
         </Grid>
         <Button
             x:Name="BtnOk"

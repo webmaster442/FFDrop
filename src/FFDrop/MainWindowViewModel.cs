@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -68,8 +69,8 @@ internal sealed partial class MainWindowViewModel : ObservableObject
         var builder = new PowershellBuilder()
             .WithUtf8Enabled()
             .WithWindowTitle(title)
-            .WithWindowTitle(Path.GetFileNameWithoutExtension(""))
-            .WithClear();
+            .WithClear()
+            .WithVariable("ffmpeg", ffmpegPath);
 
         int current = 1;
 
@@ -85,7 +86,7 @@ internal sealed partial class MainWindowViewModel : ObservableObject
                 if (FileRecognizer.IsDropConvertSupported(file))
                 {
                     builder
-                        .WithCommand(CreateCommandLine(file, ffmpegPath, additonals))
+                        .WithCommand(CreateCommandLine(file, "& $ffmpeg", additonals))
                         .WithTerminalProgress(current, files.Length);
                     ++current;
                 }
@@ -160,12 +161,26 @@ internal sealed partial class MainWindowViewModel : ObservableObject
 
         foreach (var dialogDef in _dialogdefinitions)
         {
-            if (SelectedPreset.AssociatedPreset.CommandLine.Contains($"{{{dialogDef.Name}}}"))
+            if (SelectedPreset.AssociatedPreset.CommandLine.Contains($"{{{dialogDef.Name}}}")
+                || SelectedPreset.AssociatedPreset.CommandLine.Contains($"{{{dialogDef.Name}."))
             {
                 var dialog = CustomDialogFactory.Create(dialogDef);
                 if (dialog.TryGetCommandLineValue(out var commandLine))
                 {
-                    output.Add(($"{{{dialogDef.Name}}}", commandLine));
+                    if (commandLine.StartsWith('{')
+                        && commandLine.EndsWith('}'))
+                    {
+                        // It's a JSON object with multiple values
+                        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(commandLine) ?? new Dictionary<string, string>();
+                        foreach (var setting in dict)
+                        {
+                            output.Add(($"{{{dialogDef.Name}.{setting.Key}}}", setting.Value));
+                        }
+                    }
+                    else
+                    {
+                        output.Add(($"{{{dialogDef.Name}}}", commandLine));
+                    }
                 }
                 else
                 {

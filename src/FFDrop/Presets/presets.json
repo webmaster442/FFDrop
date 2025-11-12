@@ -2,6 +2,13 @@
   "$schema": "presets.schema.json",
   "dialogdefinitions": [
     {
+      "defaultValue": "0",
+      "description": "Please select start and end time to cut. If end time is not specified, then video length will be used",
+      "dialogtype": "time",
+      "name": "timeselect",
+      "title": "Time Selection"
+    },
+    {
       "defaultValue": "448k",
       "description": "Please select audio bitrate for AC3 encoding",
       "dialogtype": "selector",
@@ -224,6 +231,13 @@
       "description": "Remuxes an input video file to MKV container without re-encoding.",
       "extension": ".mkv",
       "name": "remux-mkv",
+      "path": "Others"
+    },
+    {
+      "commandLine": "-hide_banner -ss {timeselect.start} {timeselect.end} -i {input} -c:a copy -c:v copy {output}",
+      "description": "Cut a part of input video file without re-encoding. Start and end time can be specified before encoding.",
+      "extension": ".mkv",
+      "name": "cut-to-mkv",
       "path": "Others"
     },
     {
