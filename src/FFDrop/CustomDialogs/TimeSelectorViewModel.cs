@@ -12,17 +12,25 @@ public partial class TimeSelectorViewModel: ObservableValidator
     public partial string FromTime { get; set; }
 
     partial void OnFromTimeChanged(string value)
-        => ValidateProperty(value, nameof(FromTime));
+    {
+        ValidateProperty(value, nameof(FromTime));
+        OnPropertyChanged(nameof(IsOkEnabled));
+    }
 
     [ObservableProperty]
     [CustomValidation(typeof(TimeSelectorViewModel), nameof(ValidateToTime))]
     public partial string ToTime { get; set; }
 
    partial void OnToTimeChanged(string value)
-        => ValidateProperty(value, nameof(ToTime));
-    
+    {
+        ValidateProperty(value, nameof(ToTime));
+        OnPropertyChanged(nameof(IsOkEnabled));
+    }
+
     [ObservableProperty]
     public partial bool IsToEnabled { get; set; }
+
+    public bool IsOkEnabled => !HasErrors;
 
     partial void OnIsToEnabledChanged(bool value)
     {
@@ -41,11 +49,27 @@ public partial class TimeSelectorViewModel: ObservableValidator
     {
         if (context.ObjectInstance is TimeSelectorViewModel vm)
         {
-            return vm.IsToEnabled
-                ? TimeRegex().IsMatch(value)
-                    ? ValidationResult.Success!
-                    : new ValidationResult("Invalid time format. Please use HH:MM:SS or MM:SS. or seconds")
-                : ValidationResult.Success!;
+            if (vm.IsToEnabled)
+            {
+                if (TimeRegex().IsMatch(value))
+                {
+                    if (TimeSpan.TryParse(vm.FromTime, out var from) &&
+                        TimeSpan.TryParse(vm.ToTime, out var to)
+                        && from <= to)
+                    {
+                        return ValidationResult.Success!;
+                    }
+                    return new ValidationResult("From time must be less or equal to to time");
+                }
+                else
+                {
+                    return new ValidationResult("Invalid time format. Please use HH:MM:SS or MM:SS. or seconds");
+                }
+            }
+            else
+            {
+                return ValidationResult.Success!;
+            }
         }
         return new ValidationResult("Invalid state");
     }
