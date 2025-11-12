@@ -220,4 +220,21 @@ internal sealed partial class MainWindowViewModel : ObservableObject
 
         return buffer.ToString();
     }
+
+    public async void DisplayFFmpegVersion()
+    {
+        if (!ProgramFinder.TryFindProgramPath("ffmpeg.exe", out var ffmpegPath))
+        {
+            _dialogs.ErrorMessage("FFmpeg executable not found. Please ensure ffmpeg.exe is available in the system PATH.", "FFmpeg not found");
+            return;
+        }
+
+        var version = await ProcessEx.GetProcessOutput(ffmpegPath, "-version");
+        var msg = $"""
+            {version}
+            FFMpeg Path: {ffmpegPath}
+            """;
+
+        _dialogs.InfoMessage(msg, "FFmpeg Version");
+    }
 }

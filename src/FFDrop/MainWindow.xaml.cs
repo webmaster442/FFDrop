@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 
 using FFDrop.Model;
 using FFDrop.Tools;
@@ -58,9 +59,7 @@ public partial class MainWindow : Window
     }
 
     private void MenuExit_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
+        => Close();
 
     private void MenuFFmpeg_Click(object sender, RoutedEventArgs e)
     {
@@ -74,6 +73,21 @@ public partial class MainWindow : Window
         else
         {
             _dialogs.WarningMessage("FFMpeg download cancelled or failed", "Download incomplete");
+        }
+    }
+
+    private void MenuWebsite_Click(object sender, RoutedEventArgs e)
+        => Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://github.com/webmaster442/FFDrop",
+            UseShellExecute = true
+        });
+
+    private void MenuFFmpegVersion_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.DisplayFFmpegVersion();
         }
     }
 }

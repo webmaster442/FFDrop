@@ -29,6 +29,11 @@
             BorderThickness="0,0,0,1">
             <MenuItem Header="File">
                 <MenuItem
+                    x:Name="MenuWebsite"
+                    Click="MenuWebsite_Click"
+                    Header="Visit Website..." />
+                <Separator />
+                <MenuItem
                     x:Name="MenuExit"
                     Click="MenuExit_Click"
                     Header="Exit"
@@ -60,6 +65,10 @@
                     x:Name="MenuFFmpeg"
                     Click="MenuFFmpeg_Click"
                     Header="Download FFmpeg binary from github..." />
+                <MenuItem
+                    x:Name="MenuFFmpegVersion"
+                    Click="MenuFFmpegVersion_Click"
+                    Header="Get FFmpeg version..." />
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1" ShowGridLines="False">
@@ -96,8 +105,8 @@
             </GroupBox>
             <Viewbox
                 Grid.Row="0"
-                Margin="10"
                 Grid.Column="1"
+                Margin="10"
                 HorizontalAlignment="Left">
                 <TextBlock
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
