@@ -8,17 +8,19 @@ namespace FFDrop.CustomDialogs;
 public partial class TimeSelectorViewModel: ObservableValidator
 {
     [ObservableProperty]
-    [CustomValidation(typeof(TimeSelectorViewModel), nameof(ValidateTime))]
+    [CustomValidation(typeof(TimeSelectorViewModel), nameof(ValidateFromTime))]
     public partial string FromTime { get; set; }
 
-    partial void OnFromTimeChanging(string value) => ValidateProperty(value);
+    partial void OnFromTimeChanged(string value)
+        => ValidateProperty(value, nameof(FromTime));
 
     [ObservableProperty]
-    [CustomValidation(typeof(TimeSelectorViewModel), nameof(ValidateTime))]
+    [CustomValidation(typeof(TimeSelectorViewModel), nameof(ValidateToTime))]
     public partial string ToTime { get; set; }
 
-    partial void OnFromTimeChanged(string value) => ValidateProperty(value);
-
+   partial void OnToTimeChanged(string value)
+        => ValidateProperty(value, nameof(ToTime));
+    
     [ObservableProperty]
     public partial bool IsToEnabled { get; set; }
 
@@ -35,9 +37,22 @@ public partial class TimeSelectorViewModel: ObservableValidator
         ToTime = string.Empty;
     }
 
-    public static ValidationResult ValidateTime(string value, ValidationContext context)
+    public static ValidationResult ValidateToTime(string value, ValidationContext context)
     {
-        if (value == null || TimeRegex().IsMatch(value))
+        if (context.ObjectInstance is TimeSelectorViewModel vm)
+        {
+            return vm.IsToEnabled
+                ? TimeRegex().IsMatch(value)
+                    ? ValidationResult.Success!
+                    : new ValidationResult("Invalid time format. Please use HH:MM:SS or MM:SS. or seconds")
+                : ValidationResult.Success!;
+        }
+        return new ValidationResult("Invalid state");
+    }
+
+    public static ValidationResult ValidateFromTime(string value, ValidationContext context)
+    {
+        if (TimeRegex().IsMatch(value))
             return ValidationResult.Success!;
 
         return new ValidationResult("Invalid time format. Please use HH:MM:SS or MM:SS. or seconds");

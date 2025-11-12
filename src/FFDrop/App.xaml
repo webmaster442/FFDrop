@@ -19,6 +19,28 @@
                 <Setter Property="ResizeMode" Value="CanMinimize" />
             </Style>
 
+            <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+                <Setter Property="Validation.ErrorTemplate">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <AdornedElementPlaceholder x:Name="placeholder" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="Red"
+                                    Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                        <Setter Property="BorderBrush" Value="Red" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

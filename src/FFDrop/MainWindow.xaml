@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:FFDrop.Model"
     Title="FFDrop"
-    Width="832"
-    Height="468"
+    Width="840"
+    Height="470"
     AllowDrop="True"
     DragEnter="Window_DragEnter"
     DragOver="Window_DragOver"
@@ -23,7 +23,10 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
+        <Menu
+            Grid.Row="0"
+            BorderBrush="Gray"
+            BorderThickness="0,0,0,1">
             <MenuItem Header="File">
                 <MenuItem
                     x:Name="MenuExit"
@@ -59,22 +62,16 @@
                     Header="Download FFmpeg binary from github..." />
             </MenuItem>
         </Menu>
-        <Grid
-            Grid.Row="1"
-            ShowGridLines="False">
+        <Grid Grid.Row="1" ShowGridLines="False">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="220" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition
-                    Height="Auto"
-                    MinHeight="50" />
+                <RowDefinition Height="Auto" MinHeight="50" />
             </Grid.RowDefinitions>
-            <GroupBox
-                Grid.RowSpan="2"
-                Grid.Column="0">
+            <GroupBox Grid.RowSpan="2" Grid.Column="0">
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock
@@ -84,29 +81,24 @@
                         <TextBlock Text="Presets" />
                     </StackPanel>
                 </GroupBox.Header>
-                <TreeView
-                    ItemsSource="{Binding Presets}"
-                    SelectedItemChanged="OnSelectedItemChanged">
+                <TreeView ItemsSource="{Binding Presets}" SelectedItemChanged="OnSelectedItemChanged">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="TreeViewItem">
                             <Setter Property="IsExpanded" Value="True" />
                         </Style>
                     </TreeView.ItemContainerStyle>
                     <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate
-                            DataType="{x:Type model:PresetViewModel}"
-                            ItemsSource="{Binding Children}">
-                            <TextBlock
-                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
-                                Text="{Binding Name}" />
+                        <HierarchicalDataTemplate DataType="{x:Type model:PresetViewModel}" ItemsSource="{Binding Children}">
+                            <TextBlock Foreground="{StaticResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
             </GroupBox>
             <Viewbox
                 Grid.Row="0"
+                Margin="10"
                 Grid.Column="1"
-                Margin="0,0,0,40">
+                HorizontalAlignment="Left">
                 <TextBlock
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
                     Foreground="{StaticResource AccentFillColorTertiaryBrush}"
@@ -115,15 +107,16 @@
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="0,0,0,10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                FontSize="16"
+                Margin="280,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="28"
                 Text="Drag &amp; Drop files here" />
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="4"
+                VerticalAlignment="Bottom"
                 Foreground="{StaticResource TextFillColorSecondaryBrush}"
                 Text="{Binding SelectedPreset.AssociatedPreset.Description}"
                 TextAlignment="Justify"
@@ -132,7 +125,11 @@
 
         <GroupBox
             Grid.Row="2"
-            Header="Output folder">
+            BorderBrush="Gray"
+            BorderThickness="0,1,0,0">
+            <GroupBox.Header>
+                <TextBlock Margin="5,0" Text="Output folder" />
+            </GroupBox.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -141,6 +138,7 @@
                 <TextBox
                     Grid.Column="0"
                     Margin="10,0"
+                    VerticalContentAlignment="Center"
                     Text="{Binding Settings.OutputDirectory}" />
                 <Button
                     Grid.Column="1"
