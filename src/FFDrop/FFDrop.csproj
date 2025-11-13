@@ -31,10 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Presets\presets.json">
+    <None Update="Assets\presets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Presets\presets.schema.json">
+    <None Update="Assets\presets.schema.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">

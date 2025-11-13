@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace FFDrop.Presets;
 
-internal class Loader
+internal sealed class PresetLoader
 {
     private readonly JsonSerializerOptions _options = new()
     {

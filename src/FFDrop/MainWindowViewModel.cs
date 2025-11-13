@@ -17,7 +17,7 @@ internal sealed partial class MainWindowViewModel : ObservableObject
 {
     private readonly string _presetsFile;
     private readonly IDialogs _dialogs;
-    private readonly Loader _loader;
+    private readonly PresetLoader _loader;
     private readonly Dialogdefinition[] _dialogdefinitions;
 
     public ObservableCollection<PresetViewModel> Presets { get; }
@@ -30,8 +30,8 @@ internal sealed partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel(IDialogs dialogs)
     {
         _dialogs = dialogs;
-        _loader = new Loader();
-        _presetsFile = Path.Combine(AppContext.BaseDirectory, "Presets", "presets.json");
+        _loader = new PresetLoader();
+        _presetsFile = Path.Combine(AppContext.BaseDirectory, "Assets", "presets.json");
         if (!_loader.LoadPresets(_presetsFile))
         {
             _dialogs.ErrorMessage($"Failed to load presets from {_presetsFile}. Please reinstall. App will now exit", "Error loading presets");
