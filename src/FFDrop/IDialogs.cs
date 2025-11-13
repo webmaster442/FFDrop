@@ -8,4 +8,5 @@ internal interface IDialogs
     string? SelectFolderDialog(string? startFolder);
     string? SaveFileDialog(string filterString);
     void WarningMessage(string message, string title);
+    void TextDialog(string message, string title);
 }

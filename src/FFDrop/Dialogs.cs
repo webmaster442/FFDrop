@@ -59,4 +59,16 @@ internal class Dialogs : IDialogs
         }
         return null;
     }
+
+    public void TextDialog(string message, string title)
+    {
+        var dialog = new CustomDialogs.TextOutputDialogWindow
+        {
+            Owner = Application.Current.MainWindow,
+            TextOutput = message,
+            Title = title,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner
+        };
+        dialog.ShowDialog();
+    }
 }

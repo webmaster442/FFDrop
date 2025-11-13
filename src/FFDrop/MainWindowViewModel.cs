@@ -235,6 +235,6 @@ internal sealed partial class MainWindowViewModel : ObservableObject
             FFMpeg Path: {ffmpegPath}
             """;
 
-        _dialogs.InfoMessage(msg, "FFmpeg Version");
+        _dialogs.TextDialog(msg, "FFmpeg Version");
     }
 }
