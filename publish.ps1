@@ -1,3 +1,3 @@
 dotnet restore
 dotnet build --configuration Release --no-restore
-dotnet publish -c Release -r win-x64 --self-contained true -o .\publish
+dotnet publish .\src\FFDrop\FFDrop.csproj  -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -o .\publish

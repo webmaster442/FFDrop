@@ -70,7 +70,8 @@ internal sealed partial class MainWindowViewModel : ObservableObject
             .WithUtf8Enabled()
             .WithWindowTitle(title)
             .WithClear()
-            .WithVariable("ffmpeg", ffmpegPath);
+            .WithVariable("ffmpeg", ffmpegPath)
+            .WithTerminalProgress(0, 1);
 
         int current = 1;
 
@@ -123,7 +124,8 @@ internal sealed partial class MainWindowViewModel : ObservableObject
         builder
             .WithInfoMessageBox("Conversion finished", title)
             .WithTerminalProgrssHidden()
-            .WithCurrentFolderOpenedInExplorer();
+            .WithFolderOpenedInExplorer(Settings.OutputDirectory)
+            .WithExit();
 
         File.WriteAllText(scriptFile, builder.Build());
 

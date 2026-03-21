@@ -283,6 +283,13 @@
       "path": "Video/DVD/PAL"
     },
     {
+      "commandLine": "-hide_banner -i {input} -c:v hevc_nvenc -b:v 1300k -maxrate 1400k -bufsize 3M -preset p7 -rc vbr_hq -cq 19 -spatial-aq 1 -vf \"yadif=1\" -aq-strength 8 -c:a aac -b:a 128k -ac 2 {output}",
+      "description": "Reencodes a makemkv extracted dvd",
+      "extension": ".mkv",
+      "name": "makemkv-nvh265-recode",
+      "path": "Video/Recode"
+    },
+    {
       "commandLine": "-hide_banner -i {input} -target pal-svcd -o {output}",
       "description": "Encodes an input video file to SVCD compliant MPEG-2 format for PAL SVCDs. Audio is encoded to MP2 format at 224kbps. Vido bitrate varies between 2440-2516kbps.",
       "extension": ".mpg",

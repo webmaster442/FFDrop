@@ -2,7 +2,7 @@
 
 namespace FFDrop.DomainServices;
 
-internal class PowershellBuilder
+internal sealed class PowershellBuilder
 {
     private readonly StringBuilder _scriptBuilder;
 
@@ -89,9 +89,15 @@ internal class PowershellBuilder
         return this;
     }
 
-    public PowershellBuilder WithCurrentFolderOpenedInExplorer()
+    public PowershellBuilder WithFolderOpenedInExplorer(string folder)
     {
-        _scriptBuilder.AppendLine("Invoke-Item -Path .");
+        _scriptBuilder.AppendLine($"Invoke-Item -Path \"{folder}\"");
+        return this;
+    }
+
+    public PowershellBuilder WithExit()
+    {
+        _scriptBuilder.AppendLine($"exit");
         return this;
     }
 }
