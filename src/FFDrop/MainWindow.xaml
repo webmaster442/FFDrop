@@ -120,6 +120,7 @@
                 Grid.RowSpan="2"
                 Grid.Column="0"
                 Padding="0"
+                x:Name="Expander"
                 VerticalAlignment="Stretch"
                 ExpandDirection="Right"
                 IsExpanded="{Binding Settings.PresetsExpanded}">
@@ -135,6 +136,8 @@
                 <TreeView
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
+                    MinWidth="200"
+                    MinHeight="{Binding ElementName=Expander, Path=ActualHeight}"
                     Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                     ItemsSource="{Binding PresetsModel.Presets}"
                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
@@ -186,7 +189,7 @@
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="4"
+                Margin="8"
                 VerticalAlignment="Bottom"
                 Foreground="{StaticResource TextFillColorSecondaryBrush}"
                 Text="{Binding SelectedPreset.AssociatedPreset.Description}"
