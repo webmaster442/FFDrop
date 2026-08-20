@@ -45,4 +45,11 @@ internal static class FileRecognizer
         return PlaylistFiles.Contains(extension);
     }
 
+    public static string MakeFilterString()
+    {
+        var audioFilter = string.Join(";", AudioFiles.Select(ext => $"*{ext}"));
+        var videoFilter = string.Join(";", VideoFiles.Select(ext => $"*{ext}"));
+        return $"Audio Files ({audioFilter})|{audioFilter}|Video Files ({videoFilter})|{videoFilter}|All Files (*.*)|*.*";
+    }
+
 }

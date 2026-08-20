@@ -4,7 +4,7 @@ namespace FFDrop.CustomDialogs;
 
 internal static class CustomDialogFactory
 {
-    public static ICustomDialog  Create(Dialogdefinition dialogdefinition)
+    public static ICustomDialog Create(Dialogdefinition dialogdefinition)
     {
         return dialogdefinition.Dialogtype switch
         {
@@ -14,7 +14,7 @@ internal static class CustomDialogFactory
         };
     }
 
-    private static ICustomDialog CreateSelector(Dialogdefinition dialogdefinition)
+    private static SelectorDialogWindow CreateSelector(Dialogdefinition dialogdefinition)
     {
         var dialog = new SelectorDialogWindow(dialogdefinition.Values ?? Array.Empty<string>(), dialogdefinition.DefaultValue ?? string.Empty)
         {
@@ -26,7 +26,7 @@ internal static class CustomDialogFactory
         return dialog;
     }
 
-    private static ICustomDialog CreateTimeDialog(Dialogdefinition dialogdefinition)
+    private static TimeSelectorDoalogWindow CreateTimeDialog(Dialogdefinition dialogdefinition)
     {
         var dialog = new TimeSelectorDoalogWindow()
         {

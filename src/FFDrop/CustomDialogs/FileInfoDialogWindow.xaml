@@ -1,15 +1,18 @@
 ﻿<Window
-    x:Class="FFDrop.CustomDialogs.TextOutputDialogWindow"
+    x:Class="FFDrop.CustomDialogs.FileInfoDialogWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:FFDrop.CustomDialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Text"
-    Height="400"
+    Title="File Info"
+    Width="450"
+    Height="500"
     Style="{StaticResource Subdialog}"
     mc:Ignorable="d">
-    <Grid Margin="10,10,10,10" ShowGridLines="False">
+    <Grid
+        Margin="10"
+        ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -19,19 +22,15 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox
-            x:Name="TxtOutput"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Margin="10"
-            Background="Transparent"
-            BorderThickness="0"
-            Foreground="{StaticResource TextFillColorPrimaryBrush}"
-            HorizontalScrollBarVisibility="Auto"
-            IsReadOnly="True"
-            TextWrapping="Wrap"
-            VerticalScrollBarVisibility="Auto" />
+        <TreeView
+            x:Name="FileInfoTreeView"
+            Grid.ColumnSpan="3">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Details}">
+                    <TextBlock Text="{Binding Summary}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
         <Button
             x:Name="Ok"
             Grid.Row="2"

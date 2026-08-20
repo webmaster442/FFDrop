@@ -95,9 +95,13 @@
                     x:Name="MenuFFmpeg"
                     Click="MenuFFmpeg_Click"
                     Header="Download FFmpeg binary from github..." />
+                <Separator />
+                <MenuItem
+                    Command="{Binding GetFileMediaInfoCommand}"
+                    Header="Display media information..." />
                 <MenuItem
                     x:Name="MenuFFmpegVersion"
-                    Click="MenuFFmpegVersion_Click"
+                    Command="{Binding DisplayFFmpegVersionCommand}"
                     Header="Get FFmpeg version..." />
             </MenuItem>
         </Menu>
@@ -117,10 +121,10 @@
                     MinHeight="50" />
             </Grid.RowDefinitions>
             <Expander
+                x:Name="Expander"
                 Grid.RowSpan="2"
                 Grid.Column="0"
                 Padding="0"
-                x:Name="Expander"
                 VerticalAlignment="Stretch"
                 ExpandDirection="Right"
                 IsExpanded="{Binding Settings.PresetsExpanded}">
@@ -134,10 +138,10 @@
                     </TextBlock>
                 </Expander.Header>
                 <TreeView
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
                     MinWidth="200"
                     MinHeight="{Binding ElementName=Expander, Path=ActualHeight}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
                     Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                     ItemsSource="{Binding PresetsModel.Presets}"
                     ScrollViewer.HorizontalScrollBarVisibility="Visible"

@@ -1,5 +1,11 @@
 ﻿using System.Windows;
 
+using FFDrop.DomainServices;
+using FFDrop.Utils;
+using FFDrop.Utils.FFProbe;
+
+using Microsoft.Win32;
+
 namespace FFDrop;
 
 internal class Dialogs : IDialogs
@@ -70,5 +76,32 @@ internal class Dialogs : IDialogs
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         };
         dialog.ShowDialog();
+    }
+
+    public void ShowFileInfoDialog(MediaInfoModel mediaInfo)
+    {
+        var dialog = new CustomDialogs.FileInfoDialogWindow(mediaInfo)
+        {
+            Owner = Application.Current.MainWindow,
+            Title = $"File Information",
+            WindowStartupLocation = WindowStartupLocation.CenterOwner
+        };
+        dialog.ShowDialog();
+    }
+
+    public bool SelectMediaFile(string title, out string selectedFile)
+    {
+        OpenFileDialog dialog = new()
+        {
+            Filter = FileRecognizer.MakeFilterString(),
+            Title = title
+        };
+        if (dialog.ShowDialog() == true)
+        {
+            selectedFile = dialog.FileName;
+            return true;
+        }
+        selectedFile = string.Empty;
+        return false;
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System.IO;
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 using FFDrop.DomainServices;
 using FFDrop.Model;
 using FFDrop.Presets;
 using FFDrop.Utils;
+using FFDrop.Utils.FFProbe;
 
 namespace FFDrop;
 
@@ -42,7 +44,8 @@ internal sealed partial class MainWindowViewModel : ObservableObject
     public void HandleDrop(string[] files) 
         => _appLogic.FilesHaveBeenDropped(files, SelectedPreset);
 
-    public async void DisplayFFmpegVersion()
+    [RelayCommand]
+    public async Task DisplayFFmpegVersion()
     {
         if (!ProgramFinder.TryFindProgramPath("ffmpeg.exe", out var ffmpegPath))
         {
@@ -57,5 +60,28 @@ internal sealed partial class MainWindowViewModel : ObservableObject
             """;
 
         _dialogs.TextDialog(msg, "FFmpeg Version");
+    }
+
+    [RelayCommand]
+    public async Task GetFileMediaInfo()
+    {
+        if (!ProgramFinder.TryFindProgramPath("ffprobe.exe", out var ffprobePath))
+        {
+            _dialogs.ErrorMessage("FFProbe executable not found. Please ensure ffprobe.exe is available in the system PATH.", "FFProbe not found");
+            return;
+        }
+
+        if (_dialogs.SelectMediaFile("Select a media file", out string selectedFile))
+        {
+            MediaInfoModel? model = await MediaInfo.GetMediaInfo(ffprobePath, selectedFile);
+            if (model == null)
+            {
+                _dialogs.ErrorMessage("Failed to retrieve media info. Please ensure the selected file is a valid media file.", "Media Info Error");
+                return;
+            }
+
+            _dialogs.ShowFileInfoDialog(model);
+        }
+
     }
 }

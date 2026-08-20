@@ -82,12 +82,4 @@ public partial class MainWindow : Window
             FileName = "https://github.com/webmaster442/FFDrop",
             UseShellExecute = true
         });
-
-    private void MenuFFmpegVersion_Click(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is MainWindowViewModel vm)
-        {
-            vm.DisplayFFmpegVersion();
-        }
-    }
 }

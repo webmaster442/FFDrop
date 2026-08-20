@@ -6,7 +6,7 @@ namespace FFDrop.Utils.FFProbe;
 public sealed class Format
 {
     [JsonPropertyName("filename")]
-    public required string filename { get; set; }
+    public required string Filename { get; set; }
 
     [JsonPropertyName("nb_streams")]
     public int StreamCount { get; set; }
@@ -18,10 +18,10 @@ public sealed class Format
     public required string FormatLongName { get; set; }
 
     [JsonPropertyName("start_time")]
-    public long StartTime { get; set; }
+    public double StartTime { get; set; }
 
     [JsonPropertyName("duration")]
-    public long Duration { get; set; }
+    public double Duration { get; set; }
 
     [JsonPropertyName("size")]
     public long Size { get; set; }
@@ -32,7 +32,7 @@ public sealed class Format
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Filename: {filename}");
+        sb.AppendLine($"Filename: {Filename}");
         sb.AppendLine($"Stream Count: {StreamCount}");
         sb.AppendLine($"Format Name: {FormatName}");
         sb.AppendLine($"Format Long Name: {FormatLongName}");

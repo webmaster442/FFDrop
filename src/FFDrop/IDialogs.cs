@@ -1,4 +1,6 @@
-﻿namespace FFDrop;
+﻿using FFDrop.Utils;
+
+namespace FFDrop;
 
 internal interface IDialogs
 {
@@ -9,4 +11,6 @@ internal interface IDialogs
     string? SaveFileDialog(string filterString);
     void WarningMessage(string message, string title);
     void TextDialog(string message, string title);
+    void ShowFileInfoDialog(MediaInfoModel mediaInfo);
+    bool SelectMediaFile(string title, out string selectedFile);
 }

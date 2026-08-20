@@ -12,7 +12,7 @@ public class Stream
     [JsonPropertyName("codec_long_name")]
     public required string CodecLongName { get; set; }
     [JsonPropertyName("bit_rate")]
-    public required long BitsPerSecond { get; set; }
+    public long BitsPerSecond { get; set; }
 
     [JsonPropertyName("width")]
     public int? Width { get; set; }
