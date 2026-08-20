@@ -27,19 +27,20 @@ public sealed class Format
     public long Size { get; set; }
 
     [JsonPropertyName("bit_rate")]
-    public long BitRate { get; set; }
+    public long TotalBitRate { get; set; }
 
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Filename: {Filename}");
+        StringBuilder sb = new();
+        sb.AppendLine($"{Path.GetFileName(Filename)}");
+        sb.AppendLine("-----------------------------");
         sb.AppendLine($"Stream Count: {StreamCount}");
         sb.AppendLine($"Format Name: {FormatName}");
         sb.AppendLine($"Format Long Name: {FormatLongName}");
         sb.AppendLine($"Start Time: {TimeSpan.FromSeconds(StartTime)}");
         sb.AppendLine($"Duration: {TimeSpan.FromSeconds(Duration)}");
         sb.AppendLine($"Size: {FileSize.FromBytes(Size)}");
-        sb.AppendLine($"Bit Rate: {BitRate}");
+        sb.AppendLine($"Bit Rate: {BitRate.FromBps(TotalBitRate).ToString()}");
         return sb.ToString();
     }
 }

@@ -54,7 +54,7 @@ public class Stream
         sb.AppendLine($"Index: {Index}");
         sb.AppendLine($"Codec Name: {CodecName}");
         sb.AppendLine($"Codec Long Name: {CodecLongName}");
-        sb.AppendLine($"Bit Rate: {BitRate.FromBps(BitsPerSecond)}");
+        sb.AppendLine($"Bit Rate: {BitRate.FromBps(BitsPerSecond).ToString()}");
         if (IsVideoStream)
         {
             sb.AppendLine($"Display size: {Width}x{Height}");

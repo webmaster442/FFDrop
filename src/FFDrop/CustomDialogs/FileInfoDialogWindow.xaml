@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:FFDrop.CustomDialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="File Info"
-    Width="450"
-    Height="500"
+    Width="500"
+    Height="720"
     Style="{StaticResource Subdialog}"
     mc:Ignorable="d">
     <Grid
@@ -27,9 +27,17 @@
             Grid.ColumnSpan="3">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Details}">
-                    <TextBlock Text="{Binding Summary}"/>
+                    <TextBlock
+                        MaxWidth="440"
+                        Text="{Binding Summary}"
+                        TextWrapping="Wrap" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
         </TreeView>
         <Button
             x:Name="Ok"
