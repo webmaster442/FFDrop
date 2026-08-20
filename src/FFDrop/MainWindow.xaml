@@ -39,13 +39,43 @@
                     Header="Exit"
                     InputGestureText="ALT+F4" />
             </MenuItem>
-            <MenuItem Header="Settings">
+            <MenuItem Header="View">
                 <MenuItem
                     Header="Allways on top"
                     IsCheckable="True"
                     IsChecked="{Binding Settings.AllwaysOnTop}" />
+                <MenuItem
+                    Header="Presets"
+                    IsCheckable="True"
+                    IsChecked="{Binding Settings.PresetsExpanded}" />
                 <Separator />
-                <MenuItem Header="Behaviour">
+                <MenuItem
+                    Header="Preset categories"
+                    ItemsSource="{Binding PresetsModel.PresetCategories}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="IsCheckable" Value="True" />
+                            <Setter Property="IsChecked" Value="{Binding IsChecked}" />
+                            <Setter Property="Header" Value="{Binding Name}" />
+                            <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Menu}, Path=DataContext.PresetsModel.ApplyFilteringCommand}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding PresetsModel.ShowAllCommand}"
+                    Header="Reset category filtering" />
+            </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem
+                    Header="Genete PLS Playlist"
+                    IsCheckable="True"
+                    IsChecked="{Binding Settings.CreatePls}" />
+                <MenuItem
+                    Header="Generate M3U Playlist"
+                    IsCheckable="True"
+                    IsChecked="{Binding Settings.CreateM3U}" />
+                <Separator />
+                <MenuItem Header="Script">
                     <MenuItem
                         Header="Create shell script &amp; ask to run it"
                         IsCheckable="True"
@@ -71,38 +101,61 @@
                     Header="Get FFmpeg version..." />
             </MenuItem>
         </Menu>
-        <Grid Grid.Row="1" ShowGridLines="False">
+        <Grid
+            Grid.Row="1"
+            ShowGridLines="False">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220" />
+                <ColumnDefinition
+                    Width="Auto"
+                    MaxWidth="280" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition Height="Auto" MinHeight="50" />
+                <RowDefinition
+                    Height="Auto"
+                    MinHeight="50" />
             </Grid.RowDefinitions>
-            <GroupBox Grid.RowSpan="2" Grid.Column="0">
-                <GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            Margin="5"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Text="&#xE8F1;" />
-                        <TextBlock Text="Presets" />
-                    </StackPanel>
-                </GroupBox.Header>
-                <TreeView ItemsSource="{Binding Presets}" SelectedItemChanged="OnSelectedItemChanged">
+            <Expander
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Padding="0"
+                VerticalAlignment="Stretch"
+                ExpandDirection="Right"
+                IsExpanded="{Binding Settings.PresetsExpanded}">
+                <Expander.Header>
+                    <TextBlock
+                        Margin="4,8"
+                        Text="Presets">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="-90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <TreeView
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    ItemsSource="{Binding PresetsModel.Presets}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    SelectedItemChanged="OnSelectedItemChanged">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="TreeViewItem">
                             <Setter Property="IsExpanded" Value="True" />
                         </Style>
                     </TreeView.ItemContainerStyle>
                     <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type model:PresetViewModel}" ItemsSource="{Binding Children}">
-                            <TextBlock Foreground="{StaticResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type model:PresetViewModel}"
+                            ItemsSource="{Binding Children}">
+                            <TextBlock
+                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                                Text="{Binding Name}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-            </GroupBox>
+            </Expander>
             <Viewbox
                 Grid.Row="0"
                 Grid.Column="1"
@@ -122,6 +175,15 @@
                 FontSize="28"
                 Text="Drag &amp; Drop files here" />
             <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,60,16,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                FontSize="14"
+                Text="{Binding SelectedPreset.AssociatedPreset.Name, StringFormat=Preset: {0}}"
+                TextAlignment="Center" />
+            <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="4"
@@ -137,7 +199,9 @@
             BorderBrush="Gray"
             BorderThickness="0,1,0,0">
             <GroupBox.Header>
-                <TextBlock Margin="5,0" Text="Output folder" />
+                <TextBlock
+                    Margin="5,0"
+                    Text="Output folder" />
             </GroupBox.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -146,11 +210,12 @@
                 </Grid.ColumnDefinitions>
                 <TextBox
                     Grid.Column="0"
-                    Margin="10,0"
+                    Margin="8,0"
                     VerticalContentAlignment="Center"
-                    Text="{Binding Settings.OutputDirectory}" />
+                    Text="{Binding Settings.OutputDirectory, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Column="1"
+                    Margin="0,0,8,0"
                     Command="{Binding Settings.BrowseCommand}"
                     Content="Browse..."
                     Style="{DynamicResource AccentButtonStyle}" />

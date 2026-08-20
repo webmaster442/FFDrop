@@ -97,7 +97,7 @@ internal sealed class PowershellBuilder
 
     public PowershellBuilder WithExit()
     {
-        _scriptBuilder.AppendLine($"exit");
+        _scriptBuilder.AppendLine("exit");
         return this;
     }
 }

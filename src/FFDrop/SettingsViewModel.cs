@@ -56,6 +56,33 @@ internal partial class SettingsViewModel : ObservableObject
         Settings.Default.Save();
     }
 
+    [ObservableProperty]
+    public partial bool PresetsExpanded { get; set; }
+
+    partial void OnPresetsExpandedChanged(bool value)
+    {
+        Settings.Default.PresetsExpanded = value;
+        Settings.Default.Save();
+    }
+
+    [ObservableProperty]
+    public partial bool CreateM3U { get; set; }
+
+    partial void OnCreateM3UChanged(bool value)
+    {
+        Settings.Default.CreateM3U = value;
+        Settings.Default.Save();
+    }
+
+    [ObservableProperty]
+    public partial bool CreatePls { get; set; }
+
+    partial void OnCreatePlsChanged(bool value)
+    {
+        Settings.Default.CreatePls = value;
+        Settings.Default.Save();
+    }
+
     public SettingsViewModel(IDialogs dialogs)
     {
         _dialogs = dialogs;
@@ -68,6 +95,9 @@ internal partial class SettingsViewModel : ObservableObject
         CreateShellRun = Settings.Default.CreateShellRun;
         CreateShell = Settings.Default.CreateShell;
         AllwaysOnTop = Settings.Default.AllwaysOnTop;
+        PresetsExpanded = Settings.Default.PresetsExpanded;
+        CreateM3U = Settings.Default.CreateM3U;
+        CreatePls = Settings.Default.CreatePls;
     }
 
     [RelayCommand]
