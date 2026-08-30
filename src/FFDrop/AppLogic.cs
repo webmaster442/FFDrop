@@ -41,8 +41,20 @@ internal sealed class AppLogic
             return;
         }
 
+
+        if (!ProgramFinder.TryFindProgramPath("ffprobe.exe", out var ffprobePath))
+        {
+            _dialogs.ErrorMessage("FFprobe executable not found. Please ensure ffprobe.exe is available in the system PATH.", "FFprobe not found");
+            return;
+        }
+
         var scriptFile = Path.Combine(_settings.OutputDirectory,
                                       Path.ChangeExtension(Path.GetFileName(_settings.OutputDirectory), ".ps1"));
+
+        List<string> filesToConvert = new();
+        List<string> filesToSkip = new();
+
+        SortFilesToConvert(filesToConvert, filesToSkip, files);
 
         var title = Path.GetFileName(scriptFile);
 
@@ -53,64 +65,29 @@ internal sealed class AppLogic
             .WithWindowTitle(title)
             .WithClear()
             .WithVariable("ffmpeg", ffmpegPath)
+            .WithVariable("ffprobe", ffprobePath)
             .WithTerminalProgress(0, 1);
 
         int current = 1;
 
-        if (!TryGetCustomSelectorValues(selectedPreset, out var additonals))
+        if (!TryGetCustomSelectorValues(selectedPreset, out List<(string key, string value)>? additionals))
         {
             return;
         }
 
         List<string> playlistItems = new();
 
-        foreach (var file in files)
+        foreach (var file in filesToConvert)
         {
-            if (File.Exists(file))
-            {
-                if (FileRecognizer.IsDropConvertSupported(file))
-                {
-                    string outputFileName = GetOutputFileName(file, selectedPreset);
+            string outputFileName = GetOutputFileName(file, selectedPreset);
 
-                    builder
-                        .WithCommand(CreateCommandLine(file, outputFileName, "& $ffmpeg", selectedPreset, additonals))
-                        .WithTerminalProgress(current, files.Length);
-                    ++current;
+            builder
+                .WithCommand(CreateCommandLine(file, outputFileName, "& $ffmpeg", selectedPreset, additionals))
+                .WithTerminalProgress(current, filesToConvert.Count);
 
-                    playlistItems.Add(outputFileName);
-                }
-                else if (FileRecognizer.IsPlaylistFile(file)
-                    && PlaylistUtils.TryLoadPlaylistItems(file, out var playlistitems))
-                {
-                    foreach (var item in playlistitems)
-                    {
-                        if (File.Exists(item)
-                            && FileRecognizer.IsDropConvertSupported(item))
-                        {
-                            string outputFileName = GetOutputFileName(item, selectedPreset);
+            ++current;
 
-                            builder
-                                .WithCommand(CreateCommandLine(item, outputFileName, "& $ffmpeg", selectedPreset, additonals))
-                                .WithTerminalProgress(current, files.Length);
-                            ++current;
-
-                            playlistItems.Add(outputFileName);
-                        }
-                        else
-                        {
-                            skipped.Add(Path.GetFileName(item));
-                        }
-                    }
-                }
-                else
-                {
-                    skipped.Add(Path.GetFileName(file));
-                }
-            }
-            else
-            {
-                skipped.Add(Path.GetFileName(file));
-            }
+            playlistItems.Add(outputFileName);
         }
 
         builder
@@ -155,6 +132,41 @@ internal sealed class AppLogic
             _dialogs.InfoMessage($"Script created successfully at:\r\n{scriptFile}", "Script created");
         }
 
+    }
+
+    private static void SortFilesToConvert(List<string> filesToConvert, List<string> filesToSkip, in string[] files)
+    {
+        foreach (var file in files)
+        {
+            if (File.Exists(file))
+            {
+                if (FileRecognizer.IsDropConvertSupported(file))
+                {
+                    filesToConvert.Add(file);
+
+                }
+                else if (FileRecognizer.IsPlaylistFile(file)
+                    && PlaylistUtils.TryLoadPlaylistItems(file, out var playlistitems))
+                {
+                    foreach (var item in playlistitems)
+                    {
+                        if (File.Exists(item)
+                            && FileRecognizer.IsDropConvertSupported(item))
+                        {
+                            filesToConvert.Add(item);
+                        }
+                        else
+                        {
+                            filesToSkip.Add(Path.GetFileName(item));
+                        }
+                    }
+                }
+                else
+                {
+                    filesToSkip.Add(Path.GetFileName(file));
+                }
+            }
+        }
     }
 
     private string GetOutputFileName(string file, PresetViewModel selectedPreset)
@@ -203,11 +215,11 @@ internal sealed class AppLogic
         return true;
     }
 
-    private string CreateCommandLine(string file,
-                                     string outputFile,
-                                     string ffmpegPath,
-                                     PresetViewModel? selectedPreset,
-                                     IEnumerable<(string key, string value)> values)
+    private static string CreateCommandLine(string file,
+                                            string outputFile,
+                                            string ffmpegPath,
+                                            PresetViewModel? selectedPreset,
+                                            IEnumerable<(string key, string value)> values)
     {
         if (selectedPreset == null
             || selectedPreset.AssociatedPreset == null)

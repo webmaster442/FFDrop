@@ -1,6 +1,10 @@
-﻿namespace FFDrop.Utils;
+﻿using System.Numerics;
 
-internal readonly struct BitRate
+namespace FFDrop.Utils;
+
+internal readonly record struct BitRate :
+    IAdditionOperators<BitRate, BitRate, BitRate>,
+    ISubtractionOperators<BitRate, BitRate, BitRate>
 {
     private readonly long _bitsPerSecond;
 
@@ -23,4 +27,10 @@ internal readonly struct BitRate
 
     public static BitRate FromBps(long bitsPerSecond)
         => new(bitsPerSecond);
+
+    public static BitRate operator +(BitRate left, BitRate right)
+        => new(left._bitsPerSecond + right._bitsPerSecond);
+
+    public static BitRate operator -(BitRate left, BitRate right)
+        => new(left._bitsPerSecond - right._bitsPerSecond);
 }
